@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APK包管�?- DroidBot</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 50%, #ec4899 100%);
+            --secondary-gradient: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #f97316 100%);
+            --accent-gradient: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
+            --bg-dark: #020617;
+            --bg-card: #0f172a;
+            --bg-card-hover: #1e293b;
+            --border-color: rgba(148, 163, 184, 0.1);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --info: #3b82f6;
+            --glow-primary: rgba(14, 165, 233, 0.4);
+            --glow-accent: rgba(139, 92, 246, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .glow-effect {
+            background: var(--primary-gradient);
+            filter: blur(80px);
+            opacity: 0.15;
+            position: absolute;
+            top: -10%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .glow-effect-2 {
+            background: var(--accent-gradient);
+            filter: blur(60px);
+            opacity: 0.1;
+            position: absolute;
+            bottom: -10%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border-color);
+            padding: 24px 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            overflow-y: auto;
+        }
+
+        .logo {
+            padding: 0 24px 24px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 16px;
+        }
+
+        .logo h1 {
+            font-size: 20px;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .nav-menu {
+            padding: 0 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--primary-gradient);
+            transform: scaleY(0);
+            transition: transform 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+        }
+
+        .nav-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .nav-item.active {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .nav-item.active::before {
+            transform: scaleY(1);
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .nav-item span {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 32px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .page-title h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .page-title p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            outline: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: left 0.3s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn svg {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .filter-select {
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-item .value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--info);
+        }
+
+        .stat-item .label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .apk-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .apk-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .apk-card:hover {
+            border-color: rgba(102, 126, 234, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .apk-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .apk-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .apk-icon svg {
+            width: 28px;
+            height: 28px;
+            color: white;
+        }
+
+        .apk-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .apk-version {
+            font-size: 12px;
+            color: var(--text-secondary);
+            padding: 2px 8px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .apk-meta {
+            padding: 16px 20px;
+        }
+
+        .meta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .meta-row:last-child {
+            border-bottom: none;
+        }
+
+        .meta-label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .meta-value {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .apk-actions {
+            display: flex;
+            gap: 8px;
+            padding: 16px 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .action-btn.primary {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+        }
+
+        .action-btn.primary:hover {
+            background: rgba(102, 126, 234, 0.25);
+        }
+
+        .action-btn.danger {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--error);
+        }
+
+        .action-btn.danger:hover {
+            background: rgba(239, 68, 68, 0.25);
+        }
+
+        .action-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .upload-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .upload-modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            width: 90%;
+            max-width: 500px;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error);
+        }
+
+        .file-drop-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 20px;
+        }
+
+        .file-drop-area:hover {
+            border-color: rgba(102, 126, 234, 0.5);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .file-drop-area.dragover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .file-drop-area svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 12px;
+            color: var(--text-muted);
+        }
+
+        .file-drop-area p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .file-drop-area small {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .file-drop-area input[type="file"] {
+            display: none;
+        }
+
+        .uploaded-info {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .uploaded-info.show {
+            display: flex;
+            align-items: center;
+        }
+
+        .uploaded-info svg {
+            width: 20px;
+            height: 20px;
+            color: var(--success);
+            margin-right: 12px;
+        }
+
+        .uploaded-info .file-details {
+            flex: 1;
+        }
+
+        .uploaded-info .file-details h4 {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .uploaded-info .file-details p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .uploaded-info .remove-btn {
+            padding: 6px 12px;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            padding: 16px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1001;
+            animation: slideInToast 0.3s ease;
+        }
+
+        @keyframes slideInToast {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .toast.success svg { color: var(--success); }
+        .toast.error svg { color: var(--error); }
+        .toast.info svg { color: var(--info); }
+
+        .toast svg { width: 18px; height: 18px; }
+        .toast-message { font-size: 14px; font-weight: 500; }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .apk-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="glow-effect"></div>
+    <div class="glow-effect-2"></div>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>DroidBot</h1>
+                <p>Android 兼容性测试平�?/p>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item" data-page="dashboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span>仪表�?/span>
+                </a>
+                <a href="devices.html" class="nav-item" data-page="devices">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>设备管理</span>
+                </a>
+                <a href="execution.html" class="nav-item" data-page="execution">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                    <span>测试执行</span>
+                </a>
+                <a href="reports.html" class="nav-item" data-page="reports">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    <span>测试报告</span>
+                </a>
+                <a href="apk-manager.html" class="nav-item active" data-page="apk-manager">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <span>APK包管�?/span>
+                </a>
+                <a href="ai-script.html" class="nav-item" data-page="ai-script">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 20h9"></path>
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                    </svg>
+                    <span>AI 脚本生成</span>
+                </a>
+                <a href="settings.html" class="nav-item" data-page="settings">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span>LLM配置</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="page-header">
+                <div class="page-title">
+                    <h2>APK 包管�?/h2>
+                    <p>管理和上传测试用�?APK 文件</p>
+                </div>
+                <button class="btn btn-primary" id="upload-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <span>上传 APK</span>
+                </button>
+            </header>
+
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="搜索 APK 文件..." id="search-input">
+                <select class="filter-select" id="filter-select">
+                    <option value="all">全部</option>
+                    <option value="recent">最近上�?/option>
+                    <option value="tested">已测�?/option>
+                    <option value="untested">未测�?/option>
+                </select>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-item">
+                    <div class="value">24</div>
+                    <div class="label">�?APK 数量</div>
+                </div>
+                <div class="stat-item">
+                    <div class="value">18</div>
+                    <div class="label">已测�?/div>
+                </div>
+                <div class="stat-item">
+                    <div class="value">6</div>
+                    <div class="label">未测�?/div>
+                </div>
+                <div class="stat-item">
+                    <div class="value">1.2 GB</div>
+                    <div class="label">总占用空�?/div>
+                </div>
+            </div>
+
+            <div class="apk-grid" id="apk-grid">
+                <div class="apk-card">
+                    <div class="apk-header">
+                        <div class="apk-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="apk-name">MyApp</div>
+                        <span class="apk-version">v2.0.1</span>
+                    </div>
+                    <div class="apk-meta">
+                        <div class="meta-row">
+                            <span class="meta-label">大小</span>
+                            <span class="meta-value">25.6 MB</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">包名</span>
+                            <span class="meta-value">com.example.myapp</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">上传时间</span>
+                            <span class="meta-value">2026-05-13</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">状�?/span>
+                            <span class="meta-value" style="color: var(--success)">已测�?/span>
+                        </div>
+                    </div>
+                    <div class="apk-actions">
+                        <button class="action-btn primary" data-action="test">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <span>开始测�?/span>
+                        </button>
+                        <button class="action-btn danger" data-action="delete">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 6h18"></path>
+                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                            </svg>
+                            <span>删除</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="apk-card">
+                    <div class="apk-header">
+                        <div class="apk-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                        </div>
+                        <div class="apk-name">FinanceApp</div>
+                        <span class="apk-version">v1.5.3</span>
+                    </div>
+                    <div class="apk-meta">
+                        <div class="meta-row">
+                            <span class="meta-label">大小</span>
+                            <span class="meta-value">38.2 MB</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">包名</span>
+                            <span class="meta-value">com.finance.app</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">上传时间</span>
+                            <span class="meta-value">2026-05-12</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">状�?/span>
+                            <span class="meta-value" style="color: var(--warning)">未测�?/span>
+                        </div>
+                    </div>
+                    <div class="apk-actions">
+                        <button class="action-btn primary" data-action="test">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <span>开始测�?/span>
+                        </button>
+                        <button class="action-btn danger" data-action="delete">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 6h18"></path>
+                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                            </svg>
+                            <span>删除</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="apk-card">
+                    <div class="apk-header">
+                        <div class="apk-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </div>
+                        <div class="apk-name">ChatApp</div>
+                        <span class="apk-version">v3.2.0</span>
+                    </div>
+                    <div class="apk-meta">
+                        <div class="meta-row">
+                            <span class="meta-label">大小</span>
+                            <span class="meta-value">45.8 MB</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">包名</span>
+                            <span class="meta-value">com.chat.app</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">上传时间</span>
+                            <span class="meta-value">2026-05-11</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">状�?/span>
+                            <span class="meta-value" style="color: var(--success)">已测�?/span>
+                        </div>
+                    </div>
+                    <div class="apk-actions">
+                        <button class="action-btn primary" data-action="test">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <span>开始测�?/span>
+                        </button>
+                        <button class="action-btn danger" data-action="delete">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 6h18"></path>
+                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                            </svg>
+                            <span>删除</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="upload-modal" id="upload-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>上传 APK 文件</h3>
+                <span class="modal-close" id="modal-close">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </span>
+            </div>
+            <div class="file-drop-area" id="file-drop-area">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <p><strong>拖拽 APK 文件到此�?/strong></p>
+                <small>或点击选择文件 · 支持 .apk 格式 · 最�?100MB</small>
+                <input type="file" id="apk-file-input" accept=".apk">
+            </div>
+            <div class="uploaded-info" id="uploaded-info">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="16 10 10 16 8 14"></polyline>
+                </svg>
+                <div class="file-details">
+                    <h4 id="uploaded-filename">app-release.apk</h4>
+                    <p id="uploaded-filesize">25.6 MB</p>
+                </div>
+                <button class="remove-btn" id="remove-upload">移除</button>
+            </div>
+            <div class="input-group">
+                <label>版本号（可选）</label>
+                <input type="text" placeholder="例如: v1.0.0" id="version-input">
+            </div>
+            <div class="input-group">
+                <label>描述（可选）</label>
+                <input type="text" placeholder="简要描述这�?APK" id="description-input">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancel-upload">取消</button>
+                <button class="btn btn-primary" id="confirm-upload">确认上传</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast" style="display: none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="16 10 10 16 8 14"></polyline>
+        </svg>
+        <span class="toast-message" id="toast-message">操作成功</span>
+    </div>
+
+    <script>
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+
+        function showToast(type, message) {
+            toast.className = `toast ${type}`;
+            toastMessage.textContent = message;
+            toast.style.display = 'flex';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        const uploadBtn = document.getElementById('upload-btn');
+        const uploadModal = document.getElementById('upload-modal');
+        const modalClose = document.getElementById('modal-close');
+        const cancelUpload = document.getElementById('cancel-upload');
+        const confirmUpload = document.getElementById('confirm-upload');
+
+        uploadBtn.addEventListener('click', () => {
+            uploadModal.classList.add('show');
+        });
+
+        modalClose.addEventListener('click', () => {
+            uploadModal.classList.remove('show');
+        });
+
+        cancelUpload.addEventListener('click', () => {
+            uploadModal.classList.remove('show');
+        });
+
+        const fileDropArea = document.getElementById('file-drop-area');
+        const fileInput = document.getElementById('apk-file-input');
+        const uploadedInfo = document.getElementById('uploaded-info');
+        const removeUpload = document.getElementById('remove-upload');
+
+        fileDropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileDropArea.classList.add('dragover');
+        });
+
+        fileDropArea.addEventListener('dragleave', () => {
+            fileDropArea.classList.remove('dragover');
+        });
+
+        fileDropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileDropArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        fileDropArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            if (!file.name.endsWith('.apk')) {
+                showToast('error', '请上�?APK 文件');
+                return;
+            }
+            document.getElementById('uploaded-filename').textContent = file.name;
+            document.getElementById('uploaded-filesize').textContent = formatSize(file.size);
+            uploadedInfo.classList.add('show');
+        }
+
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        removeUpload.addEventListener('click', () => {
+            uploadedInfo.classList.remove('show');
+            fileInput.value = '';
+        });
+
+        confirmUpload.addEventListener('click', () => {
+            if (!uploadedInfo.classList.contains('show')) {
+                showToast('error', '请先选择文件');
+                return;
+            }
+            showToast('info', '正在上传...');
+            setTimeout(() => {
+                uploadModal.classList.remove('show');
+                uploadedInfo.classList.remove('show');
+                fileInput.value = '';
+                document.getElementById('version-input').value = '';
+                document.getElementById('description-input').value = '';
+                showToast('success', 'APK 上传成功');
+            }, 1500);
+        });
+
+        const searchInput = document.getElementById('search-input');
+        searchInput.addEventListener('input', (e) => {
+            showToast('info', `搜索: ${e.target.value}`);
+        });
+
+        const actionBtns = document.querySelectorAll('.action-btn');
+        actionBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const action = btn.getAttribute('data-action');
+                const apkName = btn.closest('.apk-card').querySelector('.apk-name').textContent;
+                
+                if (action === 'test') {
+                    showToast('info', `开始测�? ${apkName}`);
+                    setTimeout(() => {
+                        window.location.href = 'new-test.html';
+                    }, 500);
+                } else if (action === 'delete') {
+                    showToast('error', `已删�? ${apkName}`);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

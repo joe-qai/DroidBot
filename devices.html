@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设备管理 - DroidBot</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 50%, #ec4899 100%);
+            --secondary-gradient: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #f97316 100%);
+            --accent-gradient: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
+            --bg-dark: #020617;
+            --bg-card: #0f172a;
+            --bg-card-hover: #1e293b;
+            --border-color: rgba(148, 163, 184, 0.1);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --info: #3b82f6;
+            --glow-primary: rgba(14, 165, 233, 0.4);
+            --glow-accent: rgba(139, 92, 246, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .glow-effect {
+            background: var(--primary-gradient);
+            filter: blur(80px);
+            opacity: 0.15;
+            position: absolute;
+            top: -10%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .glow-effect-2 {
+            background: var(--accent-gradient);
+            filter: blur(60px);
+            opacity: 0.1;
+            position: absolute;
+            bottom: -10%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border-color);
+            padding: 24px 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            overflow-y: auto;
+        }
+
+        .logo {
+            padding: 0 24px 24px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 16px;
+        }
+
+        .logo h1 {
+            font-size: 20px;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .nav-menu {
+            padding: 0 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--primary-gradient);
+            transform: scaleY(0);
+            transition: transform 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+        }
+
+        .nav-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .nav-item.active {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .nav-item.active::before {
+            transform: scaleY(1);
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-item:hover svg {
+            transform: translateX(2px);
+        }
+
+        .nav-item span {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 32px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-title h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .page-title p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            outline: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: left 0.3s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn svg {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .search-box svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            color: var(--text-muted);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .filter-tab {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .filter-tab.active {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        .filter-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .device-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .device-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .device-card:hover {
+            border-color: rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .device-card.online {
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .device-card.busy {
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .device-card.offline {
+            opacity: 0.6;
+        }
+
+        .device-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .device-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .device-status.online {
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success);
+            animation: pulse-green 2s ease-in-out infinite;
+        }
+
+        .device-status.busy {
+            background: var(--warning);
+            box-shadow: 0 0 10px var(--warning);
+            animation: pulse-yellow 1.5s ease-in-out infinite;
+        }
+
+        .device-status.offline {
+            background: var(--text-muted);
+        }
+
+        @keyframes pulse-green {
+            0%, 100% { box-shadow: 0 0 10px var(--success); }
+            50% { box-shadow: 0 0 20px var(--success); }
+        }
+
+        @keyframes pulse-yellow {
+            0%, 100% { box-shadow: 0 0 10px var(--warning); }
+            50% { box-shadow: 0 0 20px var(--warning); }
+        }
+
+        .device-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .device-info p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .device-specs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .spec-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .spec-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .spec-value {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .device-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .action-btn.connect {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+        }
+
+        .action-btn.connect:hover {
+            background: rgba(16, 185, 129, 0.25);
+        }
+
+        .action-btn.disconnect {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--error);
+        }
+
+        .action-btn.disconnect:hover {
+            background: rgba(239, 68, 68, 0.25);
+        }
+
+        .action-btn.view {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+        }
+
+        .action-btn.view:hover {
+            background: rgba(102, 126, 234, 0.25);
+        }
+
+        .action-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            padding: 14px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1001;
+            animation: slideInToast 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes slideInToast {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .toast.hide {
+            animation: slideOutToast 0.3s ease forwards;
+        }
+
+        @keyframes slideOutToast {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(100px); }
+        }
+
+        .toast.success {
+            border-color: rgba(16, 185, 129, 0.3);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .toast.success svg {
+            color: var(--success);
+        }
+
+        .toast.error {
+            border-color: rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .toast.error svg {
+            color: var(--error);
+        }
+
+        .toast.info {
+            border-color: rgba(59, 130, 246, 0.3);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .toast.info svg {
+            color: var(--info);
+        }
+
+        .toast svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .toast-message {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+                .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .modal-section {
+            text-align: center;
+        }
+
+        .scanning {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .scan-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            animation: scanPulse 1.4s ease-in-out infinite;
+        }
+
+        .scan-dot:nth-child(2) { animation-delay: 0.2s; }
+        .scan-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes scanPulse {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .device-list-modal {
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .device-item-modal {
+            display: flex;
+            align-items: center;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .device-item-modal:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(14, 165, 233, 0.3);
+        }
+
+        .device-item-modal input[type="radio"] {
+            display: none;
+        }
+
+        .device-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-muted);
+            border-radius: 50%;
+            position: relative;
+            margin-right: 12px;
+            transition: all 0.2s;
+        }
+
+        input[type="radio"]:checked + label .device-radio {
+            border-color: var(--info);
+            background: var(--info);
+        }
+
+        input[type="radio"]:checked + label .device-radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .device-info-modal {
+            flex: 1;
+        }
+
+        .device-name-modal {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .device-detail-modal {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .device-status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .device-status-badge.available {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 12px;
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .modal-footer .btn {
+            flex: 1;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .device-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="glow-effect"></div>
+    <div class="glow-effect-2"></div>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>DroidBot</h1>
+                <p>Android 兼容性测试平�?/p>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item" data-page="dashboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span>仪表�?/span>
+                </a>
+                <a href="devices.html" class="nav-item active" data-page="devices">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>设备管理</span>
+                </a>
+                <a href="execution.html" class="nav-item" data-page="execution">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                    <span>测试执行</span>
+                </a>
+                <a href="reports.html" class="nav-item" data-page="reports">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    <span>测试报告</span>
+                </a>
+                <a href="ai-script.html" class="nav-item" data-page="ai-script">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 20h9"></path>
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                    </svg>
+                    <span>AI 脚本生成</span>
+                </a>
+                <a href="settings.html" class="nav-item" data-page="settings">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span>设置</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="page-header">
+                <div class="page-title">
+                    <h2>设备管理</h2>
+                    <p>管理所有测试设备，查看设备状态和性能信息</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="refresh-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <polyline points="1 20 1 14 7 14"></polyline>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                        <span>刷新列表</span>
+                    </button>
+                    <button class="btn btn-primary" id="add-device-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 6v6l4 2"></path>
+                        </svg>
+                        <span>添加设备</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="search-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" placeholder="搜索设备名称、型号或IP...">
+            </div>
+
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">全部 (15)</button>
+                <button class="filter-tab" data-filter="online">在线 (12)</button>
+                <button class="filter-tab" data-filter="busy">忙碌 (2)</button>
+                <button class="filter-tab" data-filter="offline">离线 (1)</button>
+            </div>
+
+            <div class="device-grid">
+                <div class="device-card online">
+                    <div class="device-header">
+                        <div class="device-info">
+                            <h3>Pixel 8 Pro</h3>
+                            <p>Android 15 | API 35</p>
+                        </div>
+                        <div class="device-status online"></div>
+                    </div>
+                    <div class="device-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">分辨�?/div>
+                            <div class="spec-value">1440x3120</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">CPU</div>
+                            <div class="spec-value">骁龙8 Gen 3</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">内存</div>
+                            <div class="spec-value">12GB</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">IP地址</div>
+                            <div class="spec-value">192.168.1.101</div>
+                        </div>
+                    </div>
+                    <div class="device-actions">
+                        <button class="action-btn disconnect">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 16H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v9m-7 4h4m-4 0l4-4m-4 0l-4-4"></path>
+                            </svg>
+                            断开
+                        </button>
+                        <button class="action-btn view">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
+                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            详情
+                        </button>
+                    </div>
+                </div>
+
+                <div class="device-card busy">
+                    <div class="device-header">
+                        <div class="device-info">
+                            <h3>Galaxy S24 Ultra</h3>
+                            <p>Android 14 | API 34</p>
+                        </div>
+                        <div class="device-status busy"></div>
+                    </div>
+                    <div class="device-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">分辨�?/div>
+                            <div class="spec-value">1440x3120</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">CPU</div>
+                            <div class="spec-value">骁龙8 Gen 3</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">内存</div>
+                            <div class="spec-value">16GB</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">IP地址</div>
+                            <div class="spec-value">192.168.1.102</div>
+                        </div>
+                    </div>
+                    <div class="device-actions">
+                        <button class="action-btn connect">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 15v2m-6 4h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2zm10-10V7a4 4 0 0 0-8 0v4h8z"></path>
+                            </svg>
+                            连接
+                        </button>
+                        <button class="action-btn view">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
+                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            详情
+                        </button>
+                    </div>
+                </div>
+
+                <div class="device-card offline">
+                    <div class="device-header">
+                        <div class="device-info">
+                            <h3>Xiaomi 14</h3>
+                            <p>Android 14 | API 34</p>
+                        </div>
+                        <div class="device-status offline"></div>
+                    </div>
+                    <div class="device-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">分辨�?/div>
+                            <div class="spec-value">1200x2668</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">CPU</div>
+                            <div class="spec-value">骁龙8 Gen 3</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">内存</div>
+                            <div class="spec-value">16GB</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">IP地址</div>
+                            <div class="spec-value">192.168.1.103</div>
+                        </div>
+                    </div>
+                    <div class="device-actions">
+                        <button class="action-btn connect">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 15v2m-6 4h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2zm10-10V7a4 4 0 0 0-8 0v4h8z"></path>
+                            </svg>
+                            连接
+                        </button>
+                        <button class="action-btn view">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
+                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            详情
+                        </button>
+                    </div>
+                </div>
+
+                <div class="device-card online">
+                    <div class="device-header">
+                        <div class="device-info">
+                            <h3>iPhone 15 Pro</h3>
+                            <p>iOS 17 | 测试模式</p>
+                        </div>
+                        <div class="device-status online"></div>
+                    </div>
+                    <div class="device-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">分辨�?/div>
+                            <div class="spec-value">1170x2532</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">CPU</div>
+                            <div class="spec-value">A17 Pro</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">内存</div>
+                            <div class="spec-value">8GB</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">IP地址</div>
+                            <div class="spec-value">192.168.1.104</div>
+                        </div>
+                    </div>
+                    <div class="device-actions">
+                        <button class="action-btn disconnect">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 16H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v9m-7 4h4m-4 0l4-4m-4 0l-4-4"></path>
+                            </svg>
+                            断开
+                        </button>
+                        <button class="action-btn view">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
+                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            详情
+                        </button>
+                    </div>
+                </div>
+
+                <div class="device-card online">
+                    <div class="device-header">
+                        <div class="device-info">
+                            <h3>OPPO Find X7</h3>
+                            <p>Android 14 | API 34</p>
+                        </div>
+                        <div class="device-status online"></div>
+                    </div>
+                    <div class="device-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">分辨�?/div>
+                            <div class="spec-value">1264x2772</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">CPU</div>
+                            <div class="spec-value">天玑9300</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">内存</div>
+                            <div class="spec-value">16GB</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">IP地址</div>
+                            <div class="spec-value">192.168.1.105</div>
+                        </div>
+                    </div>
+                    <div class="device-actions">
+                        <button class="action-btn disconnect">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 16H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v9m-7 4h4m-4 0l4-4m-4 0l-4-4"></path>
+                            </svg>
+                            断开
+                        </button>
+                        <button class="action-btn view">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
+                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            详情
+                        </button>
+                    </div>
+                </div>
+
+                <div class="device-card busy">
+                    <div class="device-header">
+                        <div class="device-info">
+                            <h3>vivo X100 Pro</h3>
+                            <p>Android 14 | API 34</p>
+                        </div>
+                        <div class="device-status busy"></div>
+                    </div>
+                    <div class="device-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">分辨�?/div>
+                            <div class="spec-value">1344x3168</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">CPU</div>
+                            <div class="spec-value">天玑9300</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">内存</div>
+                            <div class="spec-value">16GB</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">IP地址</div>
+                            <div class="spec-value">192.168.1.106</div>
+                        </div>
+                    </div>
+                    <div class="device-actions">
+                        <button class="action-btn connect">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 15v2m-6 4h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2zm10-10V7a4 4 0 0 0-8 0v4h8z"></path>
+                            </svg>
+                            连接
+                        </button>
+                        <button class="action-btn view">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
+                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            详情
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="device-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>添加设备</h3>
+                <span class="modal-close" id="modal-close">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <p>正在扫描可用设备...</p>
+                    <div id="scanning-indicator" class="scanning">
+                        <div class="scan-dot"></div>
+                        <div class="scan-dot"></div>
+                        <div class="scan-dot"></div>
+                    </div>
+                </div>
+                <div class="modal-section" id="devices-found" style="display: none;">
+                    <h4>发现可用设备</h4>
+                    <div id="available-devices" class="device-list-modal">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="modal-cancel">取消</button>
+                <button class="btn btn-primary" id="modal-confirm" disabled>连接选中设备</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="16 10 10 16 8 14"></polyline>
+        </svg>
+        <span id="toast-message"></span>
+    </div>
+
+    <script>
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+        let toastTimeout = null;
+
+        function showToast(type, message) {
+            if (toastTimeout) {
+                clearTimeout(toastTimeout);
+            }
+            
+            toast.className = `toast ${type}`;
+            toastMessage.textContent = message;
+            toast.style.display = 'flex';
+            toast.classList.remove('hide');
+            
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('hide');
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 300);
+            }, 3000);
+        }
+
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                filterTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                showToast('info', `已筛�? ${tab.textContent.split('(')[0].trim()}`);
+            });
+        });
+
+        const refreshBtn = document.getElementById('refresh-btn');
+        refreshBtn.addEventListener('click', () => {
+            showToast('info', '正在刷新设备列表...');
+            setTimeout(() => {
+                showToast('success', '设备列表已刷�?);
+            }, 1000);
+        });
+
+        const deviceModal = document.getElementById('device-modal');
+        const modalClose = document.getElementById('modal-close');
+        const modalCancel = document.getElementById('modal-cancel');
+        const modalConfirm = document.getElementById('modal-confirm');
+        const devicesFound = document.getElementById('devices-found');
+        const scanningIndicator = document.getElementById('scanning-indicator');
+        const availableDevices = document.getElementById('available-devices');
+
+        const addDeviceBtn = document.getElementById('add-device-btn');
+        addDeviceBtn.addEventListener('click', () => {
+            deviceModal.classList.add('show');
+            devicesFound.style.display = 'none';
+            scanningIndicator.style.display = 'flex';
+            modalConfirm.disabled = true;
+            
+            setTimeout(() => {
+                scanDevices();
+            }, 500);
+        });
+
+        modalClose.addEventListener('click', closeModal);
+        modalCancel.addEventListener('click', closeModal);
+        
+        deviceModal.addEventListener('click', (e) => {
+            if (e.target === deviceModal) {
+                closeModal();
+            }
+        });
+
+        function closeModal() {
+            deviceModal.classList.remove('show');
+        }
+
+        const mockDevices = [
+            { id: 'device_1', name: 'Redmi Note 13 Pro', model: '2312DRA50C', os: 'Android 14', status: 'available' },
+            { id: 'device_2', name: 'Oppo Reno 11', model: 'PHZ110', os: 'Android 14', status: 'available' },
+            { id: 'device_3', name: 'Vivo X100', model: 'V2324A', os: 'Android 14', status: 'available' },
+            { id: 'device_4', name: 'Realme GT5 Pro', model: 'RMX3888', os: 'Android 13', status: 'available' },
+        ];
+
+        function scanDevices() {
+            scanningIndicator.style.display = 'none';
+            devicesFound.style.display = 'block';
+            
+            availableDevices.innerHTML = mockDevices.map(device => `
+                <div class="device-item-modal" data-device-id="${device.id}">
+                    <input type="radio" name="device-select" id="select-${device.id}">
+                    <label for="select-${device.id}">
+                        <div class="device-radio"></div>
+                    </label>
+                    <div class="device-info-modal">
+                        <div class="device-name-modal">${device.name}</div>
+                        <div class="device-detail-modal">${device.model} | ${device.os}</div>
+                    </div>
+                    <div class="device-status-badge available">可用</div>
+                </div>
+            `).join('');
+
+            const deviceItems = availableDevices.querySelectorAll('.device-item-modal');
+            deviceItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const radio = item.querySelector('input[type="radio"]');
+                    radio.checked = true;
+                    modalConfirm.disabled = false;
+                });
+            });
+        }
+
+        modalConfirm.addEventListener('click', () => {
+            const selectedDevice = document.querySelector('input[name="device-select"]:checked');
+            if (selectedDevice) {
+                const deviceId = selectedDevice.getAttribute('id').replace('select-', '');
+                const device = mockDevices.find(d => d.id === deviceId);
+                showToast('info', `正在连接 ${device.name}...`);
+                setTimeout(() => {
+                    showToast('success', `${device.name} 连接成功，已添加到设备列表`);
+                    closeModal();
+                }, 1500);
+            }
+        });
+
+        const actionBtns = document.querySelectorAll('.action-btn');
+        actionBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const deviceName = btn.closest('.device-card').querySelector('h3').textContent;
+                if (btn.classList.contains('connect')) {
+                    showToast('info', `正在连接 ${deviceName}...`);
+                    setTimeout(() => {
+                        showToast('success', `${deviceName} 连接成功`);
+                    }, 1500);
+                } else if (btn.classList.contains('disconnect')) {
+                    showToast('info', `正在断开 ${deviceName}...`);
+                    setTimeout(() => {
+                        showToast('success', `${deviceName} 已断开`);
+                    }, 1000);
+                } else if (btn.classList.contains('view')) {
+                    showToast('info', `查看 ${deviceName} 详情`);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
