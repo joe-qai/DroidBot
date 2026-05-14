@@ -137,7 +137,6 @@ DroidBot/
 ## Reference Demos
 
 - **DroidBot Web Demo**: [https://joe-qai.github.io/DroidBot/](https://joe-qai.github.io/DroidBot/)
-- **Feishu Miaoda Demo**: [https://sd6syw7aku.aiforce.cloud/app/app_4k4a3yhc4ueev](https://sd6syw7aku.aiforce.cloud/app/app_4k4a3yhc4ueev)
 
 ## License
 
