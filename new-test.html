@@ -386,7 +386,7 @@
         }
 
         .device-card.selected::after {
-            content: '�?;
+            content: '';
             position: absolute;
             top: 8px;
             right: 8px;
@@ -867,7 +867,7 @@
             <header class="page-header">
                 <div class="page-title">
                     <h2>新建测试</h2>
-                    <p>配置测试参数，选择设备和脚本开始测试/p>
+                    <p>配置测试参数，选择设备和脚本开始测试</p>
                 </div>
             </header>
 
@@ -891,8 +891,8 @@
                         <div class="form-group">
                             <label>测试类型</label>
                             <select id="test-type">
-                                <option value="ui">UI 兼容性测�?/option>
-                                <option value="crash">崩溃检�?/option>
+                                <option value="ui">UI 兼容性测试</option>
+                                <option value="crash">崩溃检测</option>
                                 <option value="function">功能测试</option>
                                 <option value="performance">性能测试</option>
                             </select>
@@ -904,10 +904,10 @@
                         <div class="form-group">
                             <label>失败重试次数</label>
                             <select id="retry-count">
-                                <option value="0">0 �?/option>
-                                <option value="1">1 �?/option>
-                                <option value="2">2 �?/option>
-                                <option value="3">3 �?/option>
+                                <option value="0">0 次</option>
+                                <option value="1">1 次</option>
+                                <option value="2">2 次</option>
+                                <option value="3">3 次</option>
                             </select>
                         </div>
                     </div>
@@ -924,7 +924,7 @@
                             <polyline points="7 10 12 15 17 10"></polyline>
                             <line x1="12" y1="15" x2="12" y2="3"></line>
                         </svg>
-                        <h3>选择 APK �?/h3>
+                        <h3>选择 APK 包</h3>
                     </div>
                     <div class="apk-select-area" id="apk-select-area">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -968,7 +968,7 @@
                             <div class="col-checkbox"></div>
                             <div class="col-name">设备名称</div>
                             <div class="col-model">型号</div>
-                            <div class="col-status">状�?/div>
+                            <div class="col-status">状态</div>
                             <div class="col-android">Android版本</div>
                         </div>
                         <div class="device-list-item" data-device-id="1">
@@ -1019,7 +1019,7 @@
                                 Xiaomi 14
                             </div>
                             <div class="col-model">Xiaomi 14</div>
-                            <div class="col-status"><span class="status-badge busy">测试�?/span></div>
+                            <div class="col-status"><span class="status-badge busy">测试中</span></div>
                             <div class="col-android">Android 14</div>
                         </div>
                         <div class="device-list-item" data-device-id="4">
@@ -1090,15 +1090,15 @@
                         <div class="script-item" data-script-id="1">
                             <div class="script-radio"></div>
                             <div class="script-info">
-                                <div class="script-name">UI 自动化测试脚�?/div>
-                                <div class="script-desc">自动遍历应用界面，检�?UI 兼容性问�?/div>
+                                <div class="script-name">UI 自动化测试脚本</div>
+                                <div class="script-desc">自动遍历应用界面，检测 UI 兼容性问题</div>
                             </div>
                             <span class="script-type">AI 生成</span>
                         </div>
                         <div class="script-item" data-script-id="2">
                             <div class="script-radio"></div>
                             <div class="script-info">
-                                <div class="script-name">崩溃检测脚�?/div>
+                                <div class="script-name">崩溃检测脚本</div>
                                 <div class="script-desc">监控应用运行状态，捕获崩溃异常</div>
                             </div>
                             <span class="script-type">AI 生成</span>
@@ -1107,17 +1107,17 @@
                             <div class="script-radio"></div>
                             <div class="script-info">
                                 <div class="script-name">性能测试脚本</div>
-                                <div class="script-desc">测试应用启动时间、内存占用、CPU 使用�?/div>
+                                <div class="script-desc">测试应用启动时间、内存占用、CPU 使用率</div>
                             </div>
                             <span class="script-type">AI 生成</span>
                         </div>
                         <div class="script-item" data-script-id="4">
                             <div class="script-radio"></div>
                             <div class="script-info">
-                                <div class="script-name">自定义测试脚�?/div>
+                                <div class="script-name">自定义测试脚本</div>
                                 <div class="script-desc">用户自定义的测试脚本</div>
                             </div>
-                            <span class="script-type">自定�?/span>
+                            <span class="script-type">自定义</span>
                         </div>
                     </div>
                 </div>
@@ -1134,7 +1134,7 @@
                             <circle cx="12" cy="12" r="10"></circle>
                             <polyline points="12 6 12 12 16 14"></polyline>
                         </svg>
-                        <span>开始测�?/span>
+                        <span>开始测试</span>
                     </button>
                 </div>
             </div>
@@ -1197,7 +1197,7 @@
 
         function handleApkFile(file) {
             if (!file.name.endsWith('.apk')) {
-                showToast('error', '请上传 APK 文件');
+                showToast('error', '请输入测试名称');
                 return;
             }
             document.getElementById('selected-apk-name').textContent = file.name;
@@ -1298,7 +1298,7 @@
             const testName = document.getElementById('test-name').value;
             
             if (!testName.trim()) {
-                showToast('error', '�������������);
+                showToast('error', '请输入测试名称');
                 return;
             }
 
@@ -1308,7 +1308,7 @@
             }
 
             if (selectedDevices.length === 0) {
-                showToast('error', '请至少选择一台设�?);
+                showToast('error', '请至少选择一台设备');
                 return;
             }
 

@@ -321,29 +321,29 @@
 
         .device-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px;
         }
 
         .device-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 20px;
-            transition: all 0.3s ease;
+            border-radius: 12px;
+            padding: 14px;
+            transition: all 0.2s ease;
         }
 
         .device-card:hover {
             border-color: rgba(102, 126, 234, 0.3);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
         .device-card.online {
-            border-color: rgba(16, 185, 129, 0.3);
+            border-color: rgba(16, 185, 129, 0.2);
         }
 
         .device-card.busy {
-            border-color: rgba(245, 158, 11, 0.3);
+            border-color: rgba(245, 158, 11, 0.2);
         }
 
         .device-card.offline {
@@ -353,87 +353,58 @@
         .device-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
-        }
-
-        .device-status {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .device-status.online {
-            background: var(--success);
-            box-shadow: 0 0 10px var(--success);
-            animation: pulse-green 2s ease-in-out infinite;
-        }
-
-        .device-status.busy {
-            background: var(--warning);
-            box-shadow: 0 0 10px var(--warning);
-            animation: pulse-yellow 1.5s ease-in-out infinite;
-        }
-
-        .device-status.offline {
-            background: var(--text-muted);
-        }
-
-        @keyframes pulse-green {
-            0%, 100% { box-shadow: 0 0 10px var(--success); }
-            50% { box-shadow: 0 0 20px var(--success); }
-        }
-
-        @keyframes pulse-yellow {
-            0%, 100% { box-shadow: 0 0 10px var(--warning); }
-            50% { box-shadow: 0 0 20px var(--warning); }
+            align-items: center;
+            margin-bottom: 10px;
         }
 
         .device-info h3 {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .device-info p {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-secondary);
         }
 
         .device-specs {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 16px;
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
         }
 
         .spec-item {
             background: rgba(255, 255, 255, 0.03);
-            padding: 10px;
-            border-radius: 8px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            display: inline-flex;
+            gap: 4px;
+            align-items: center;
         }
 
         .spec-label {
             font-size: 11px;
             color: var(--text-muted);
-            margin-bottom: 4px;
         }
 
         .spec-value {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
         }
 
         .device-actions {
             display: flex;
-            gap: 8px;
+            gap: 6px;
         }
 
         .action-btn {
             flex: 1;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 13px;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -441,7 +412,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 4px;
         }
 
         .action-btn.connect {
@@ -472,8 +443,30 @@
         }
 
         .action-btn svg {
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
+        }
+
+        .status-badge {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .status-badge.online {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+        }
+
+        .status-badge.busy {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+        }
+
+        .status-badge.offline {
+            background: rgba(100, 116, 139, 0.15);
+            color: var(--text-muted);
         }
 
         .toast {
@@ -751,7 +744,7 @@
             }
 
             .device-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -872,40 +865,22 @@
                 <button class="filter-tab" data-filter="busy">忙碌 (2)</button>
                 <button class="filter-tab" data-filter="offline">离线 (1)</button>
             </div>
+                <div class="device-grid">
                 <div class="device-card online">
                     <div class="device-header">
                         <div class="device-info">
                             <h3>Pixel 8 Pro</h3>
-                            <p>Google Pixel 8 Pro</p>
+                            <p>Android 14 · Tensor G3 · 256GB</p>
                         </div>
                         <span class="status-badge online">在线</span>
                     </div>
                     <div class="device-specs">
-                        <div class="spec-item">
-                            <span class="spec-label">Android</span>
-                            <span class="spec-value">14</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">CPU</span>
-                            <span class="spec-value">Tensor G3</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">内存</span>
-                            <span class="spec-value">12GB</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">存储</span>
-                            <span class="spec-value">256GB</span>
-                        </div>
+                        <div class="spec-item"><span class="spec-value">Android 14</span></div>
+                        <div class="spec-item"><span class="spec-value">12GB</span></div>
+                        <div class="spec-item"><span class="spec-value">256GB</span></div>
                     </div>
                     <div class="device-actions">
-                        <button class="btn btn-secondary">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
-                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                            连接
-                        </button>
+                        <button class="action-btn connect">连接</button>
                     </div>
                 </div>
 
@@ -913,36 +888,17 @@
                     <div class="device-header">
                         <div class="device-info">
                             <h3>Samsung S24 Ultra</h3>
-                            <p>Samsung Galaxy S24 Ultra</p>
+                            <p>Android 14 · Snapdragon 8 Gen 3 · 512GB</p>
                         </div>
                         <span class="status-badge online">在线</span>
                     </div>
                     <div class="device-specs">
-                        <div class="spec-item">
-                            <span class="spec-label">Android</span>
-                            <span class="spec-value">14</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">CPU</span>
-                            <span class="spec-value">Snapdragon 8 Gen 3</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">内存</span>
-                            <span class="spec-value">16GB</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">存储</span>
-                            <span class="spec-value">512GB</span>
-                        </div>
+                        <div class="spec-item"><span class="spec-value">Android 14</span></div>
+                        <div class="spec-item"><span class="spec-value">16GB</span></div>
+                        <div class="spec-item"><span class="spec-value">512GB</span></div>
                     </div>
                     <div class="device-actions">
-                        <button class="btn btn-secondary">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
-                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                            连接
-                        </button>
+                        <button class="action-btn connect">连接</button>
                     </div>
                 </div>
 
@@ -950,36 +906,17 @@
                     <div class="device-header">
                         <div class="device-info">
                             <h3>Xiaomi 14 Pro</h3>
-                            <p>Xiaomi 14 Pro</p>
+                            <p>Android 14 · Snapdragon 8 Gen 3 · 256GB</p>
                         </div>
                         <span class="status-badge busy">测试中</span>
                     </div>
                     <div class="device-specs">
-                        <div class="spec-item">
-                            <span class="spec-label">Android</span>
-                            <span class="spec-value">14</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">CPU</span>
-                            <span class="spec-value">Snapdragon 8 Gen 3</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">内存</span>
-                            <span class="spec-value">16GB</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">存储</span>
-                            <span class="spec-value">256GB</span>
-                        </div>
+                        <div class="spec-item"><span class="spec-value">Android 14</span></div>
+                        <div class="spec-item"><span class="spec-value">16GB</span></div>
+                        <div class="spec-item"><span class="spec-value">256GB</span></div>
                     </div>
                     <div class="device-actions">
-                        <button class="btn btn-secondary" disabled>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
-                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                            测试中
-                        </button>
+                        <button class="action-btn connect" disabled>测试中</button>
                     </div>
                 </div>
 
@@ -987,36 +924,17 @@
                     <div class="device-header">
                         <div class="device-info">
                             <h3>Huawei Mate 60 Pro</h3>
-                            <p>Huawei Mate 60 Pro</p>
+                            <p>HarmonyOS 4.0 · Kirin 9000S · 512GB</p>
                         </div>
                         <span class="status-badge online">在线</span>
                     </div>
                     <div class="device-specs">
-                        <div class="spec-item">
-                            <span class="spec-label">HarmonyOS</span>
-                            <span class="spec-value">4.0</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">CPU</span>
-                            <span class="spec-value">Kirin 9000S</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">内存</span>
-                            <span class="spec-value">12GB</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">存储</span>
-                            <span class="spec-value">512GB</span>
-                        </div>
+                        <div class="spec-item"><span class="spec-value">HarmonyOS 4.0</span></div>
+                        <div class="spec-item"><span class="spec-value">12GB</span></div>
+                        <div class="spec-item"><span class="spec-value">512GB</span></div>
                     </div>
                     <div class="device-actions">
-                        <button class="btn btn-secondary">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
-                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                            连接
-                        </button>
+                        <button class="action-btn connect">连接</button>
                     </div>
                 </div>
 
@@ -1024,36 +942,17 @@
                     <div class="device-header">
                         <div class="device-info">
                             <h3>Vivo X100 Pro</h3>
-                            <p>Vivo X100 Pro</p>
+                            <p>Android 14 · Dimensity 9300 · 256GB</p>
                         </div>
                         <span class="status-badge online">在线</span>
                     </div>
                     <div class="device-specs">
-                        <div class="spec-item">
-                            <span class="spec-label">Android</span>
-                            <span class="spec-value">14</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">CPU</span>
-                            <span class="spec-value">Dimensity 9300</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">内存</span>
-                            <span class="spec-value">16GB</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">存储</span>
-                            <span class="spec-value">256GB</span>
-                        </div>
+                        <div class="spec-item"><span class="spec-value">Android 14</span></div>
+                        <div class="spec-item"><span class="spec-value">16GB</span></div>
+                        <div class="spec-item"><span class="spec-value">256GB</span></div>
                     </div>
                     <div class="device-actions">
-                        <button class="btn btn-secondary">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
-                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                            连接
-                        </button>
+                        <button class="action-btn connect">连接</button>
                     </div>
                 </div>
 
@@ -1061,36 +960,17 @@
                     <div class="device-header">
                         <div class="device-info">
                             <h3>OPPO Find X7</h3>
-                            <p>OPPO Find X7 Ultra</p>
+                            <p>Android 13 · Snapdragon 8 Gen 2 · 512GB</p>
                         </div>
                         <span class="status-badge offline">离线</span>
                     </div>
                     <div class="device-specs">
-                        <div class="spec-item">
-                            <span class="spec-label">Android</span>
-                            <span class="spec-value">13</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">CPU</span>
-                            <span class="spec-value">Snapdragon 8 Gen 2</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">内存</span>
-                            <span class="spec-value">16GB</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">存储</span>
-                            <span class="spec-value">512GB</span>
-                        </div>
+                        <div class="spec-item"><span class="spec-value">Android 13</span></div>
+                        <div class="spec-item"><span class="spec-value">16GB</span></div>
+                        <div class="spec-item"><span class="spec-value">512GB</span></div>
                     </div>
                     <div class="device-actions">
-                        <button class="btn btn-secondary" disabled>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
-                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                            离线
-                        </button>
+                        <button class="action-btn connect" disabled>离线</button>
                     </div>
                 </div>
 
@@ -1098,36 +978,17 @@
                     <div class="device-header">
                         <div class="device-info">
                             <h3>OnePlus 12</h3>
-                            <p>OnePlus 12</p>
+                            <p>Android 14 · Snapdragon 8 Gen 3 · 256GB</p>
                         </div>
                         <span class="status-badge online">在线</span>
                     </div>
                     <div class="device-specs">
-                        <div class="spec-item">
-                            <span class="spec-label">Android</span>
-                            <span class="spec-value">14</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">CPU</span>
-                            <span class="spec-value">Snapdragon 8 Gen 3</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">内存</span>
-                            <span class="spec-value">16GB</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">存储</span>
-                            <span class="spec-value">256GB</span>
-                        </div>
+                        <div class="spec-item"><span class="spec-value">Android 14</span></div>
+                        <div class="spec-item"><span class="spec-value">16GB</span></div>
+                        <div class="spec-item"><span class="spec-value">256GB</span></div>
                     </div>
                     <div class="device-actions">
-                        <button class="btn btn-secondary">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
-                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                            连接
-                        </button>
+                        <button class="action-btn connect">连接</button>
                     </div>
                 </div>
 
@@ -1135,36 +996,17 @@
                     <div class="device-header">
                         <div class="device-info">
                             <h3>Realme GT5 Pro</h3>
-                            <p>Realme GT5 Pro</p>
+                            <p>Android 14 · Snapdragon 8 Gen 3 · 1TB</p>
                         </div>
                         <span class="status-badge busy">测试中</span>
                     </div>
                     <div class="device-specs">
-                        <div class="spec-item">
-                            <span class="spec-label">Android</span>
-                            <span class="spec-value">14</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">CPU</span>
-                            <span class="spec-value">Snapdragon 8 Gen 3</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">内存</span>
-                            <span class="spec-value">24GB</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">存储</span>
-                            <span class="spec-value">1TB</span>
-                        </div>
+                        <div class="spec-item"><span class="spec-value">Android 14</span></div>
+                        <div class="spec-item"><span class="spec-value">24GB</span></div>
+                        <div class="spec-item"><span class="spec-value">1TB</span></div>
                     </div>
                     <div class="device-actions">
-                        <button class="btn btn-secondary" disabled>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
-                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                            测试中
-                        </button>
+                        <button class="action-btn connect" disabled>测试中</button>
                     </div>
                 </div>
 
@@ -1172,36 +1014,17 @@
                     <div class="device-header">
                         <div class="device-info">
                             <h3>Pixel 7</h3>
-                            <p>Google Pixel 7</p>
+                            <p>Android 14 · Tensor G2 · 128GB</p>
                         </div>
                         <span class="status-badge online">在线</span>
                     </div>
                     <div class="device-specs">
-                        <div class="spec-item">
-                            <span class="spec-label">Android</span>
-                            <span class="spec-value">14</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">CPU</span>
-                            <span class="spec-value">Tensor G2</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">内存</span>
-                            <span class="spec-value">8GB</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">存储</span>
-                            <span class="spec-value">128GB</span>
-                        </div>
+                        <div class="spec-item"><span class="spec-value">Android 14</span></div>
+                        <div class="spec-item"><span class="spec-value">8GB</span></div>
+                        <div class="spec-item"><span class="spec-value">128GB</span></div>
                     </div>
                     <div class="device-actions">
-                        <button class="btn btn-secondary">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
-                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                            连接
-                        </button>
+                        <button class="action-btn connect">连接</button>
                     </div>
                 </div>
 
@@ -1209,36 +1032,17 @@
                     <div class="device-header">
                         <div class="device-info">
                             <h3>Samsung S23</h3>
-                            <p>Samsung Galaxy S23</p>
+                            <p>Android 13 · Snapdragon 8 Gen 2 · 128GB</p>
                         </div>
                         <span class="status-badge online">在线</span>
                     </div>
                     <div class="device-specs">
-                        <div class="spec-item">
-                            <span class="spec-label">Android</span>
-                            <span class="spec-value">13</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">CPU</span>
-                            <span class="spec-value">Snapdragon 8 Gen 2</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">内存</span>
-                            <span class="spec-value">8GB</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">存储</span>
-                            <span class="spec-value">128GB</span>
-                        </div>
+                        <div class="spec-item"><span class="spec-value">Android 13</span></div>
+                        <div class="spec-item"><span class="spec-value">8GB</span></div>
+                        <div class="spec-item"><span class="spec-value">128GB</span></div>
                     </div>
                     <div class="device-actions">
-                        <button class="btn btn-secondary">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
-                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                            连接
-                        </button>
+                        <button class="action-btn connect">连接</button>
                     </div>
                 </div>
 
@@ -1246,36 +1050,17 @@
                     <div class="device-header">
                         <div class="device-info">
                             <h3>Redmi K70</h3>
-                            <p>Redmi K70 Pro</p>
+                            <p>Android 14 · Snapdragon 8 Gen 3 · 512GB</p>
                         </div>
                         <span class="status-badge online">在线</span>
                     </div>
                     <div class="device-specs">
-                        <div class="spec-item">
-                            <span class="spec-label">Android</span>
-                            <span class="spec-value">14</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">CPU</span>
-                            <span class="spec-value">Snapdragon 8 Gen 3</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">内存</span>
-                            <span class="spec-value">16GB</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">存储</span>
-                            <span class="spec-value">512GB</span>
-                        </div>
+                        <div class="spec-item"><span class="spec-value">Android 14</span></div>
+                        <div class="spec-item"><span class="spec-value">16GB</span></div>
+                        <div class="spec-item"><span class="spec-value">512GB</span></div>
                     </div>
                     <div class="device-actions">
-                        <button class="btn btn-secondary">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
-                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                            连接
-                        </button>
+                        <button class="action-btn connect">连接</button>
                     </div>
                 </div>
 
@@ -1283,36 +1068,115 @@
                     <div class="device-header">
                         <div class="device-info">
                             <h3>Honor Magic6</h3>
-                            <p>Honor Magic6 Pro</p>
+                            <p>Android 14 · Snapdragon 8 Gen 3 · 512GB</p>
                         </div>
                         <span class="status-badge online">在线</span>
                     </div>
                     <div class="device-specs">
-                        <div class="spec-item">
-                            <span class="spec-label">Android</span>
-                            <span class="spec-value">14</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">CPU</span>
-                            <span class="spec-value">Snapdragon 8 Gen 3</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">内存</span>
-                            <span class="spec-value">16GB</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">存储</span>
-                            <span class="spec-value">512GB</span>
-                        </div>
+                        <div class="spec-item"><span class="spec-value">Android 14</span></div>
+                        <div class="spec-item"><span class="spec-value">16GB</span></div>
+                        <div class="spec-item"><span class="spec-value">512GB</span></div>
                     </div>
                     <div class="device-actions">
-                        <button class="btn btn-secondary">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
-                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                            连接
-                        </button>
+                        <button class="action-btn connect">连接</button>
                     </div>
                 </div>
             </div>
+        </main>
+    </div>
+
+    <div id="toast">
+        <span id="toast-message"></span>
+    </div>
+
+    <div class="modal-overlay" id="add-device-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>添加设备</h3>
+                <div class="modal-close" id="modal-close">&times;</div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <p>扫描网络中的可用设备</p>
+                    <div class="scanning">
+                        <div class="scan-dot"></div>
+                        <div class="scan-dot"></div>
+                        <div class="scan-dot"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="modal-cancel">取消</button>
+                <button class="btn btn-primary" id="modal-confirm">确认添加</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+        let toastTimeout = null;
+
+        function showToast(type, message) {
+            if (toastTimeout) {
+                clearTimeout(toastTimeout);
+            }
+            toast.className = `toast ${type}`;
+            toastMessage.textContent = message;
+            toast.style.display = 'flex';
+            toast.classList.remove('hide');
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('hide');
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 300);
+            }, 3000);
+        }
+
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                filterTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                showToast('info', `已筛选 ${tab.textContent.split('(')[0].trim()}`);
+            });
+        });
+
+        const refreshBtn = document.getElementById('refresh-btn');
+        refreshBtn.addEventListener('click', () => {
+            showToast('info', '正在刷新设备列表...');
+            setTimeout(() => {
+                showToast('success', '设备列表已刷新');
+            }, 1000);
+        });
+
+        const addDeviceBtn = document.getElementById('add-device-btn');
+        const addDeviceModal = document.getElementById('add-device-modal');
+        const modalClose = document.getElementById('modal-close');
+        const modalCancel = document.getElementById('modal-cancel');
+
+        addDeviceBtn.addEventListener('click', () => {
+            addDeviceModal.classList.add('show');
+        });
+
+        modalClose.addEventListener('click', () => {
+            addDeviceModal.classList.remove('show');
+        });
+
+        modalCancel.addEventListener('click', () => {
+            addDeviceModal.classList.remove('show');
+        });
+
+        const connectBtns = document.querySelectorAll('.action-btn.connect:not([disabled])');
+        connectBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const deviceName = btn.closest('.device-card').querySelector('h3').textContent;
+                showToast('info', `正在连接 "${deviceName}"...`);
+                setTimeout(() => {
+                    showToast('success', `"${deviceName}" 已连接`);
+                }, 1500);
+            });
+        });
+    </script>
+</body>
+</html>

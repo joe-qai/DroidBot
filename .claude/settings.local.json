@@ -1,7 +1,16 @@
 {
   "permissions": {
     "allow": [
-      "Bash(ls -la *.html)"
+      "Bash(ls -la *.html)",
+      "Bash(python fix_encoding.py)",
+      "Bash(python fix_remaining.py)",
+      "Bash(python -c \"\nimport re\nwith open\\(r'C:\\\\pythonworkspace\\\\DroidBot\\\\new-test.html', 'rb'\\) as f:\n    content = f.read\\(\\)\n\nmatches = list\\(re.finditer\\(b'\\\\xef\\\\xbf\\\\xbd', content\\)\\)\nprint\\(f'Found {len\\(matches\\)} remaining U+FFFD chars'\\)\nfor m in matches[:20]:\n    start = max\\(0, m.start\\(\\)-30\\)\n    end = min\\(len\\(content\\), m.end\\(\\)+30\\)\n    context = content[start:end]\n    print\\(f'  Position {m.start\\(\\)}: ...{context!r}...'\\)\n\")",
+      "Bash(python fix_line1301.py)",
+      "Bash(python fix_final.py)",
+      "Bash(python -c \"\nimport os\n\nfiles = ['new-test.html', 'devices.html', 'execution.html', 'ai-script.html', 'settings.html', 'reports.html']\nfor f in files:\n    path = os.path.join\\(r'C:\\\\pythonworkspace\\\\DroidBot', f\\)\n    with open\\(path, 'rb'\\) as fh:\n        content = fh.read\\(\\)\n    fffd = content.count\\(b'\\\\xef\\\\xbf\\\\xbd'\\)\n    has_html_close = content.strip\\(\\).endswith\\(b'</html>'\\)\n    lines = len\\(content.splitlines\\(\\)\\)\n    print\\(f'{f}: {lines} lines, FFFD={fffd}, closes={has_html_close}'\\)\n\")",
+      "Bash(python -c \"\nwith open\\(r'C:\\\\pythonworkspace\\\\DroidBot\\\\devices.html', 'rb'\\) as f:\n    content = f.read\\(\\)\nhas_html_close = content.strip\\(\\).endswith\\(b'</html>'\\)\nlines = len\\(content.splitlines\\(\\)\\)\nfffd = content.count\\(b'\\\\xef\\\\xbf\\\\xbd'\\)\nprint\\(f'devices.html: {lines} lines, FFFD={fffd}, closes={has_html_close}'\\)\n\")",
+      "Bash(python -c \"\nwith open\\(r'C:\\\\pythonworkspace\\\\DroidBot\\\\devices.html', 'rb'\\) as f:\n    content = f.read\\(\\)\nhas_html_close = content.strip\\(\\).endswith\\(b'</html>'\\)\nlines = len\\(content.splitlines\\(\\)\\)\nprint\\(f'devices.html: {lines} lines, closes={has_html_close}'\\)\n\" && echo \"All files check:\" && python -c \"\nimport os\nfiles = ['new-test.html', 'devices.html', 'execution.html', 'ai-script.html', 'settings.html', 'reports.html']\nfor f in files:\n    path = os.path.join\\(r'C:\\\\pythonworkspace\\\\DroidBot', f\\)\n    with open\\(path, 'rb'\\) as fh:\n        content = fh.read\\(\\)\n    fffd = content.count\\(b'\\\\xef\\\\xbf\\\\xbd'\\)\n    closes = content.strip\\(\\).endswith\\(b'</html>'\\)\n    lines = len\\(content.splitlines\\(\\)\\)\n    status = 'OK' if fffd == 0 and closes else 'ISSUE'\n    print\\(f'  {f}: {lines} lines, FFFD={fffd}, closes={closes} -> {status}'\\)\n\")",
+      "Bash(ls fix*.py 2>/dev/null || echo \"No fix scripts remaining\")"
     ]
   }
 }

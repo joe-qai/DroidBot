@@ -639,3 +639,329 @@
                     </svg>
                     <span>测试执行</span>
                 </a>
+                <a href="reports.html" class="nav-item active" data-page="reports">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    <span>测试报告</span>
+                </a>
+                <a href="apk-manager.html" class="nav-item" data-page="apk-manager">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <span>APK管理</span>
+                </a>
+                <a href="ai-script.html" class="nav-item" data-page="ai-script">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 20h9"></path>
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                    </svg>
+                    <span>AI 脚本生成</span>
+                </a>
+                <a href="settings.html" class="nav-item" data-page="settings">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span>设置</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="page-header">
+                <div class="page-title">
+                    <h2>测试报告</h2>
+                    <p>查看和管理所有测试报告</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="refresh-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <polyline points="1 20 1 14 7 14"></polyline>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                        <span>刷新</span>
+                    </button>
+                    <button class="btn btn-primary" id="export-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        <span>导出报告</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="search-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" placeholder="搜索报告...">
+            </div>
+
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">全部 (4)</button>
+                <button class="filter-tab" data-filter="pass">通过 (2)</button>
+                <button class="filter-tab" data-filter="fail">失败 (1)</button>
+                <button class="filter-tab" data-filter="partial">部分通过 (1)</button>
+            </div>
+
+            <div class="report-list">
+                <div class="report-item">
+                    <div class="report-header">
+                        <div class="report-info">
+                            <h3>Android 15 兼容性测试报告</h3>
+                            <p>应用版本 v2.0.1 · 5 台设备 · 86 个用例</p>
+                        </div>
+                        <span class="report-date">2026-05-13</span>
+                    </div>
+                    <div class="report-summary">
+                        <div class="summary-item">
+                            <div class="summary-value total">86</div>
+                            <div class="summary-label">总用例</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value pass">78</div>
+                            <div class="summary-label">通过</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value fail">8</div>
+                            <div class="summary-label">失败</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value rate">91%</div>
+                            <div class="summary-label">通过率</div>
+                        </div>
+                    </div>
+                    <div class="report-actions">
+                        <button class="action-btn view">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
+                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            查看详情
+                        </button>
+                        <button class="action-btn download">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            下载报告
+                        </button>
+                    </div>
+                </div>
+
+                <div class="report-item">
+                    <div class="report-header">
+                        <div class="report-info">
+                            <h3>UI 自动化测试报告 - 登录模块</h3>
+                            <p>应用版本 v1.8.0 · 3 台设备 · 24 个用例</p>
+                        </div>
+                        <span class="report-date">2026-05-12</span>
+                    </div>
+                    <div class="report-summary">
+                        <div class="summary-item">
+                            <div class="summary-value total">24</div>
+                            <div class="summary-label">总用例</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value pass">22</div>
+                            <div class="summary-label">通过</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value fail">2</div>
+                            <div class="summary-label">失败</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value rate">92%</div>
+                            <div class="summary-label">通过率</div>
+                        </div>
+                    </div>
+                    <div class="report-actions">
+                        <button class="action-btn view">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
+                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            查看详情
+                        </button>
+                        <button class="action-btn download">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            下载报告
+                        </button>
+                    </div>
+                </div>
+
+                <div class="report-item">
+                    <div class="report-header">
+                        <div class="report-info">
+                            <h3>性能测试报告 - 首页加载</h3>
+                            <p>应用版本 v2.0.0 · 2 台设备 · 12 个用例</p>
+                        </div>
+                        <span class="report-date">2026-05-11</span>
+                    </div>
+                    <div class="report-summary">
+                        <div class="summary-item">
+                            <div class="summary-value total">12</div>
+                            <div class="summary-label">总用例</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value pass">7</div>
+                            <div class="summary-label">通过</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value fail">5</div>
+                            <div class="summary-label">失败</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value rate">58%</div>
+                            <div class="summary-label">通过率</div>
+                        </div>
+                    </div>
+                    <div class="report-actions">
+                        <button class="action-btn view">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
+                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            查看详情
+                        </button>
+                        <button class="action-btn download">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            下载报告
+                        </button>
+                    </div>
+                </div>
+
+                <div class="report-item">
+                    <div class="report-header">
+                        <div class="report-info">
+                            <h3>回归测试报告 - 支付模块</h3>
+                            <p>应用版本 v2.0.1 · 4 台设备 · 36 个用例</p>
+                        </div>
+                        <span class="report-date">2026-05-10</span>
+                    </div>
+                    <div class="report-summary">
+                        <div class="summary-item">
+                            <div class="summary-value total">36</div>
+                            <div class="summary-label">总用例</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value pass">34</div>
+                            <div class="summary-label">通过</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value fail">2</div>
+                            <div class="summary-label">失败</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value rate">94%</div>
+                            <div class="summary-label">通过率</div>
+                        </div>
+                    </div>
+                    <div class="report-actions">
+                        <button class="action-btn view">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
+                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            查看详情
+                        </button>
+                        <button class="action-btn download">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            下载报告
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="toast">
+        <span id="toast-message"></span>
+    </div>
+
+    <script>
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+        let toastTimeout = null;
+
+        function showToast(type, message) {
+            if (toastTimeout) {
+                clearTimeout(toastTimeout);
+            }
+            toast.className = `toast ${type}`;
+            toastMessage.textContent = message;
+            toast.style.display = 'flex';
+            toast.classList.remove('hide');
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('hide');
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 300);
+            }, 3000);
+        }
+
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                filterTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                showToast('info', `已筛选 ${tab.textContent.split('(')[0].trim()}`);
+            });
+        });
+
+        const refreshBtn = document.getElementById('refresh-btn');
+        refreshBtn.addEventListener('click', () => {
+            showToast('info', '正在刷新报告列表...');
+            setTimeout(() => {
+                showToast('success', '报告列表已刷新');
+            }, 1000);
+        });
+
+        const exportBtn = document.getElementById('export-btn');
+        exportBtn.addEventListener('click', () => {
+            showToast('info', '正在导出报告...');
+            setTimeout(() => {
+                showToast('success', '报告导出成功');
+            }, 2000);
+        });
+
+        const actionBtns = document.querySelectorAll('.action-btn');
+        actionBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const reportName = btn.closest('.report-item').querySelector('h3').textContent;
+                if (btn.classList.contains('view')) {
+                    showToast('info', `查看 "${reportName}" 详情`);
+                } else if (btn.classList.contains('download')) {
+                    showToast('info', `正在下载 "${reportName}"...`);
+                    setTimeout(() => {
+                        showToast('success', `"${reportName}" 下载成功`);
+                    }, 1500);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
