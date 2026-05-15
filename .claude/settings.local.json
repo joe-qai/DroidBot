@@ -17,7 +17,12 @@
       "WebFetch(domain:docs.anthropic.com)",
       "WebFetch(domain:www.npmjs.com)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Skill(superpowers:brainstorming)",
+      "Skill(superpowers:writing-plans)",
+      "mcp__sequential-thinking__sequentialthinking",
+      "Bash(npm --version)",
+      "Bash(dir C:\\\\pythonworkspace\\\\DroidBot\\\\docs\\\\superpowers\\\\plans\\\\ *)"
     ]
   }
 }
